@@ -1,0 +1,37 @@
+sap.ui.define([
+    "sap/ui/test/opaQunit",
+    "./pages/JourneyRunner"
+], function (opaTest, runner) {
+    "use strict";
+
+    function journey() {
+        QUnit.module("First journey");
+
+        opaTest("Start application", function (Given, When, Then) {
+            Given.iStartMyApp();
+
+            Then.onTheNotesList.iSeeThisPage();
+
+        });
+
+
+        opaTest("Navigate to ObjectPage", function (Given, When, Then) {
+            // Note: this test will fail if the ListReport page doesn't show any data
+            
+            When.onTheNotesList.onFilterBar().iExecuteSearch();
+            
+            Then.onTheNotesList.onTable().iCheckRows();
+
+            When.onTheNotesList.onTable().iPressRow(0);
+            Then.onTheNotesObjectPage.iSeeThisPage();
+
+        });
+
+        opaTest("Teardown", function (Given, When, Then) { 
+            // Cleanup
+            Given.iTearDownMyApp();
+        });
+    }
+
+    runner.run([journey]);
+});
