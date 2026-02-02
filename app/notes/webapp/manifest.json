@@ -1,5 +1,9 @@
 {
   "_version": "1.81.0",
+  "sap.cloud": {
+    "public": true,
+    "service": "myNotes.service"
+  },
   "sap.app": {
     "id": "ns.notes",
     "type": "application",
@@ -22,6 +26,18 @@
         "settings": {
           "annotations": [],
           "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "notes-display": {
+          "semanticObject": "notes",
+          "action": "display",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
         }
       }
     }

@@ -1,0 +1,2 @@
+sap.ui.define(["sap/m/MessageToast","sap/m/MessageBox"],function(e,t){"use strict";return{deletealltasks:function(s,i){t.confirm("Are you really really sure?",{title:"Delete all tasks",emphasizedAction:t.Action.OK,onClose:async function(i){if(i!==t.Action.OK){return}try{await this.editFlow.invokeAction("deleteAllTasks",{contexts:s});e.show("All tasks deleted")}catch(e){t.error("Deletion failed")}}.bind(this)})}}});
+//# sourceMappingURL=DeleteAllTasks.js.map
