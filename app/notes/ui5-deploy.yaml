@@ -1,8 +1,6 @@
-# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
-
 specVersion: "4.0"
 metadata:
-  name: ns.notes
+  name: notes
 type: application
 resources:
   configuration:
@@ -12,8 +10,6 @@ builder:
     excludes:
       - "/test/**"
       - "/localService/**"
-      - /test/**
-      - /localService/**
   customTasks:
     - name: webide-extension-task-updateManifestJson
       afterTask: replaceVersion
@@ -23,7 +19,6 @@ builder:
     - name: ui5-task-zipper
       afterTask: generateCachebusterInfo
       configuration:
-        archiveName: nsnotes
-        relativePaths: true
+        archiveName: extensibility
         additionalFiles:
           - xs-app.json

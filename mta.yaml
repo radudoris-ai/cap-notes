@@ -12,7 +12,7 @@ build-parameters:
   - builder: custom
     commands:
     - npm i
-    - npm run build:cf  #npx cds build --production
+    - npx cds build --production #npm run build:cf  
 
 # ------------------------- MODULES ----------------------------
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -23,18 +23,15 @@ modules:
   type: nodejs
   path: gen/srv
   requires:
-  - name: my-Notes-db
-  - name: my-Notes-auth
-  - name: my-Notes-destination
+    - name: my-Notes-db
+    - name: my-Notes-auth
+    - name: my-Notes-destination
   provides:
-  - name: srv-api
-    properties:
-      srv-url: ${default-url}
+    - name: srv-api
+      properties:
+        srv-url: ${default-url}
   parameters:
     buildpack: nodejs_buildpack
-    instances: 1
-  build-parameters:
-    builder: npm-ci
 
   # -------------------- DB DEPLOYER  --------------------    
 - name: my-Notes-db-deployer
@@ -44,27 +41,23 @@ modules:
   - name: my-Notes-db
   parameters:
     buildpack: nodejs_buildpack
-  # -------------------- APP DEPLOYER  --------------------        
-- name: my-Notes-app-deployer
+  # -------------------- WEBAPP CONTENT  --------------------        
+- name: my-Notes-app-content
   type: com.sap.application.content
   path: gen
   requires:
-  - name: my-Notes-auth
-  - name: srv-api
-  - name: my-Notes-html5-repo-host
-    parameters:
-      config:
-        HTML5Runtime_enabled: true
-      content-target: true
+    - name: my-Notes-html5-repo-host
+      parameters:
+        content-target: true
   build-parameters:
-    build-result: app/
+    build-result: resources
     requires:
-    - artifacts:
-      - nsnotes.zip
-      name: nsnotes
-      target-path: app/
+      - name: notes
+        artifacts:
+          - notes.zip
+        target-path: resources/
 
-# -------------------- DESTINATIONS --------------------------    
+# -------------------- DESTINATIONs --------------------------    
 - name: my-Notes-destinations
   type: com.sap.application.content
   requires:
@@ -77,6 +70,8 @@ modules:
       service-key:
         name: my-Notes-html5-repo-host-key
   - name: srv-api
+    parameters:
+      content-target: true  
   - name: my-Notes-destination
     parameters:
       content-target: true
@@ -84,28 +79,35 @@ modules:
     content:
       instance:
         destinations:
-        - Name: my-Notes-html5-repository
+        - Name: my-Notes-html5-repo-host
           ServiceInstanceName: my-Notes-html5-repo-host
           ServiceKeyName: my-Notes-html5-repo-host-key
-          sap.cloud.service: myNotes.service
-        - Authentication: OAuth2UserTokenExchange
-          Name: my-Notes-auth
+          sap.cloud.service: my-Notes
+        - Name: my-Notes-auth
+          Authentication: OAuth2UserTokenExchange
           ServiceInstanceName: my-Notes-auth
           ServiceKeyName: my-Notes-auth-key
-          sap.cloud.service: myNotes.service
+          sap.cloud.service: my-Notes
+        - Name: my-Notes-srv
+          Authentication: OAuth2UserTokenExchange
+          TokenServiceInstanceName: my-Notes-auth
+          TokenServiceKeyName: my-Notes-auth-key
+          URL: "~{srv-api/srv-url}"
+          sap.cloud.service: my-Notes
+  
         existing_destinations_policy: update
   build-parameters:
     no-source: true
 
 # -------------------- HTML5 extensibility --------------------------       
-- name: nsnotes
+- name: notes
   type: html5
   path: app/notes
   build-parameters:
     build-result: dist
     builder: custom
     commands:
-    - npm install
+    - npm ci #install
     - npm run build:cf
     supported-platforms: []
 
@@ -121,19 +123,17 @@ resources:
     service-plan: hdi-shared
 
   # -------------------- AUTH ----------------------------------    
+
 - name: my-Notes-auth
   type: org.cloudfoundry.managed-service
   parameters:
-    config:
-      oauth2-configuration:
-        credential-types:
-        - binding-secret
-        - x509
-      tenant-mode: dedicated
-      xsappname: my-Notes-${org}-${space}
-    path: ./xs-security.json
     service: xsuaa
     service-plan: application
+    path: ./xs-security.json
+    config:
+      xsappname: my-Notes-${org}-${space}
+      tenant-mode: dedicated
+
   # -------------------- DESTINATION SERVICE -------------------    
 - name: my-Notes-destination
   type: org.cloudfoundry.managed-service
@@ -144,22 +144,17 @@ resources:
         instance:
           destinations:
           - Authentication: NoAuthentication
-            HTML5.DynamicDestination: true
-            HTML5.ForwardAuthToken: true
-            Name: srv-api
-            ProxyType: Internet
-            Type: HTTP
-            URL: ~{srv-api/srv-url}
-          - Authentication: NoAuthentication
             Name: ui5
             ProxyType: Internet
             Type: HTTP
             URL: https://ui5.sap.com
           existing_destinations_policy: update
+      version: 1.0.0    
     service: destination
     service-plan: lite
-  requires:
-  - name: srv-api
+    service-name: my-Notes-destination
+ # requires:
+ # - name: srv-api
   # -------------------- REPO HOST ----------------------------- 
 - name: my-Notes-html5-repo-host
   type: org.cloudfoundry.managed-service

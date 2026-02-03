@@ -24,9 +24,10 @@
     "start": "cds-serve",
     "watch-notes": "cds watch --open ns.notes/index.html?sap-ui-xx-viewCache=false --livereload false",
     "undeploy": "cf undeploy my-Notes --delete-services --delete-service-keys --delete-service-brokers",
-    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "build": "npx -p mbt mbt build",
     "build:cf": "cds build --production",
-    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+
+    "deploy": "cf deploy mta_archives/my-Notes_1.0.0.mtar"
   },
   "private": true,
   "workspaces": [
