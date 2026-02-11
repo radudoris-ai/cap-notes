@@ -1,5 +1,52 @@
 {
-  "scopes": [],
+  
+  "xsappname": "my-Notes-36841dbdtrial-dev",
+  "tenant-mode": "dedicated",
+
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.support",
+      "description": "support"
+    },
+    {
+      "name": "$XSAPPNAME.admin",
+      "description": "admin"
+    }
+  ],
   "attributes": [],
-  "role-templates": []
+  "role-templates": [
+    {
+      "name": "support",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.support"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "admin",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.admin"
+      ],
+      "attribute-references": []
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "Support",
+      "description": "Support users (generated)",
+      "role-template-references": [
+        "$XSAPPNAME.support"
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Administrators (generated)",
+      "role-template-references": [
+        "$XSAPPNAME.admin"
+      ]
+    }
+  ]
+
 }

@@ -1,6 +1,6 @@
 specVersion: "4.0"
 metadata:
-  name: notes
+  name: mynotes
 type: application
 resources:
   configuration:
@@ -11,14 +11,9 @@ builder:
       - "/test/**"
       - "/localService/**"
   customTasks:
-    - name: webide-extension-task-updateManifestJson
-      afterTask: replaceVersion
-      configuration:
-        appFolder: webapp
-        destDir: dist
     - name: ui5-task-zipper
       afterTask: generateCachebusterInfo
       configuration:
-        archiveName: extensibility
+        archiveName: notes
         additionalFiles:
           - xs-app.json

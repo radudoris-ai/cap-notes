@@ -114,6 +114,21 @@ annotate service.Tasks with @(
             Value : status_code,
             Criticality : criticality,
         },
+        {
+            $Type : 'UI.DataField',
+            Value : duedate,
+            Label : 'duedate',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : remindersent,
+            Label : 'remindersent',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : assignedto,
+            Label : 'assignedto',
+        },
     ]
 );
 

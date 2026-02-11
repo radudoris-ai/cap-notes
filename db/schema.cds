@@ -26,6 +26,10 @@ entity Tasks : cuid {
         else 0
         end;
 
+    duedate           : Date;
+    assignedto        : String;   // user id / email
+    remindersent      : Boolean default false;
+
     note : Association to Notes;
 }
 

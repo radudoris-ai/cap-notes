@@ -4,9 +4,10 @@
   "description": "A simple CAP project.",
   "dependencies": {
     "@cap-js/hana": "^2",
+    "@cap-js/notifications": "^0.3.0",
     "@sap/cds": "^9",
-    "express": "^4",
-    "@sap/xssec": "^4"
+    "@sap/xssec": "^4",
+    "express": "^4"
   },
   "devDependencies": {
     "@cap-js/cds-typer": ">=0.1",
@@ -14,11 +15,12 @@
     "@cap-js/sqlite": "^2",
     "@sap/cds-dk": "^9.6.1",
     "@types/node": "^24.0.0",
+    "@ui5/cli": "^4.0.42",
     "cds-plugin-ui5": "^0.13.0",
-    "tsx": "^4",
-    "typescript": "^5",
+    "mbt": "^1.2.24",
     "rimraf": "^5.0.5",
-    "mbt": "^1.2.29"
+    "tsx": "^4",
+    "typescript": "^5"
   },
   "scripts": {
     "start": "cds-serve",
@@ -26,8 +28,7 @@
     "undeploy": "cf undeploy my-Notes --delete-services --delete-service-keys --delete-service-brokers",
     "build": "npx -p mbt mbt build",
     "build:cf": "cds build --production",
-
-    "deploy": "cf deploy mta_archives/my-Notes_1.0.0.mtar"
+    "deploy": "cf deploy mta_archives/mynotes_1.0.0.mtar"
   },
   "private": true,
   "workspaces": [
@@ -42,8 +43,33 @@
   "cds": {
     "requires": {
       "[production]": {
-        "db": "hana",
+        "db": {
+          "kind": "hana"
+        },
         "auth": "xsuaa"
+      },
+      "[development]": {
+        "auth": {
+          "kind": "mocked",
+          "users": {
+            "alice": {
+              "roles": [
+                "support",
+                "admin"
+              ]
+            },
+            "bob": {
+              "roles": [
+                "support"
+              ]
+            },
+             "doris.radu@msg.group": {
+              "roles": [
+                "support"
+              ]
+            }
+          }
+        }
       },
       "destinations": true,
       "html5-repo": true,

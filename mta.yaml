@@ -1,5 +1,5 @@
 _schema-version: 3.3.0
-ID: my-Notes
+ID: mynotes
 description: A simple CAP project.
 version: 1.0.0
 
@@ -82,18 +82,18 @@ modules:
         - Name: my-Notes-html5-repo-host
           ServiceInstanceName: my-Notes-html5-repo-host
           ServiceKeyName: my-Notes-html5-repo-host-key
-          sap.cloud.service: my-Notes
+          sap.cloud.service: mynotes
         - Name: my-Notes-auth
           Authentication: OAuth2UserTokenExchange
           ServiceInstanceName: my-Notes-auth
           ServiceKeyName: my-Notes-auth-key
-          sap.cloud.service: my-Notes
+          sap.cloud.service: mynotes
         - Name: my-Notes-srv
           Authentication: OAuth2UserTokenExchange
           TokenServiceInstanceName: my-Notes-auth
           TokenServiceKeyName: my-Notes-auth-key
           URL: "~{srv-api/srv-url}"
-          sap.cloud.service: my-Notes
+          sap.cloud.service: mynotes
   
         existing_destinations_policy: update
   build-parameters:
