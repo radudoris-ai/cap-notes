@@ -1,15 +1,15 @@
 import axios from "axios";
-import cds from "@sap/cds";
+//import cds from "@sap/cds";
 const xsenv = require('@sap/xsenv');
 
-function getCredentials() {
+/*function getCredentials() {
 
   const alertService = cds.env.requires["alert-notification"];
   if (!alertService?.credentials) {
     throw new Error("Alert Notification service not bound");
   }
   return alertService.credentials;
-}
+} */
 
 async function getAccessToken(credentials: any): Promise<string> {
 
@@ -19,7 +19,6 @@ async function getAccessToken(credentials: any): Promise<string> {
   console.log("<<<<<<<<<<tokenUrl:", tokenUrl);
   console.log("<<<<<<<<<<clientid:", credentials.client_id); 
   console.log("<<<<<<<<<<clientsecret:", credentials.client_secret); 
-//  console.log("<<<<<<<<<<Alert credentials:", credentials, xsuaa);
 
   if (!credentials) {
     throw new Error("Alert Notification service not configured");

@@ -48,42 +48,6 @@
     },
     "requires": {
       "destinations": true,
-      "SAP_Notifications_alert": {
-        "kind": "odata-v2",
-        "credentials": {
-          "destination": "SAP_Notifications_alert"
-        }
-      },
-      "alert-notification": {
-        "kind": "rest",
-        "credentials": {
-          "destination": "SAP_Notifications"
-        }
-      },
-      "notifications": {
-        "[development]": {
-          "kind": "notify-to-console"
-        },
-        "[hybrid]": {
-          "destination": "SAP_Notifications",
-          "kind": "notify-to-rest"
-        },
-        "[production]": {
-          "destination": "SAP_Notifications",
-          "kind": "notify-to-rest"
-        },
-        "prefix": "$app-name",
-        "types": "srv/notification-types.json",
-        "outbox": true
-      },
-      "kinds": {
-        "notify-to-console": {
-          "impl": "@cap-js/notifications/srv/notifyToConsole"
-        },
-        "notify-to-rest": {
-          "impl": "@cap-js/notifications/srv/notifyToRest"
-        }
-      },
       "[production]": {
         "db": {
           "kind": "hana"
