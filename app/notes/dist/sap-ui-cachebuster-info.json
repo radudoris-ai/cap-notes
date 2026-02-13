@@ -1,13 +1,13 @@
 {
-  "Component.js": 1769523177456,
-  "manifest.json": 1770736085531,
-  "ext/controller/DeleteAllTasks.js": 1769680763695,
-  "i18n/i18n.properties": 1769523177460,
   "ext/controller/DeleteAllTasks-dbg.js": 1769680763695,
-  "ext/controller/DeleteAllTasks.js.map": 1770737236027,
+  "manifest.json": 1770970929069,
+  "ext/controller/DeleteAllTasks.js": 1769680763695,
+  "Component.js": 1769523177456,
+  "i18n/i18n.properties": 1769523177460,
+  "ext/controller/DeleteAllTasks.js.map": 1770971475867,
   "Component-dbg.js": 1769523177456,
-  "Component.js.map": 1770737236037,
-  "Component-preload.js": 1770737236107,
-  "Component-preload.js.map": 1770737236107,
+  "Component.js.map": 1770971475864,
+  "Component-preload.js": 1770971475934,
+  "Component-preload.js.map": 1770971475934,
   "index.html": 1769523177456
 }

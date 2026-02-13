@@ -23,6 +23,7 @@ modules:
   type: nodejs
   path: gen/srv
   requires:
+    - name: CLI-alert-notes
     - name: my-Notes-db
     - name: my-Notes-auth
     - name: my-Notes-destination
@@ -115,6 +116,11 @@ modules:
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # --------------------------------------------------------------    
 resources:
+
+  # -------------------- Alert Notification  --------------------   
+- name: CLI-alert-notes
+  type: org.cloudfoundry.existing-service
+
   # -------------------- SAP HANA CLOUD SERVICE ------------------
 - name: my-Notes-db
   type: com.sap.xs.hdi-container

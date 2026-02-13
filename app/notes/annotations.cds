@@ -68,6 +68,11 @@ annotate service.Notes with @(
             Action : 'NotesService.deleteAllTasks',
             Label : 'Delete all Tasks',
         },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'NotesService.checkDueTasks',
+            Label : 'checkDueTasks',
+        },
     ],
     
 );

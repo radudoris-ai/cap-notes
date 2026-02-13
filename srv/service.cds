@@ -10,7 +10,7 @@ service NotesService {
       @(Common.SideEffects: {TargetEntities: ['in']})
       action deleteAllTasks();
 
-     // action checkDueTasks();
+      action checkDueTasks();
    }
 
    entity Tasks as projection on my.Tasks;

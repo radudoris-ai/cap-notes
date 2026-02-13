@@ -6,7 +6,9 @@
     "@cap-js/hana": "^2",
     "@cap-js/notifications": "^0.3.0",
     "@sap/cds": "^9",
+    "@sap/xsenv": "^6.1.0",
     "@sap/xssec": "^4",
+    "axios": "^1.13.5",
     "express": "^4"
   },
   "devDependencies": {
@@ -41,7 +43,47 @@
     "#cds-models/*": "./@cds-models/*/index.js"
   },
   "cds": {
+    "log": {
+      "level": "debug"
+    },
     "requires": {
+      "destinations": true,
+      "SAP_Notifications_alert": {
+        "kind": "odata-v2",
+        "credentials": {
+          "destination": "SAP_Notifications_alert"
+        }
+      },
+      "alert-notification": {
+        "kind": "rest",
+        "credentials": {
+          "destination": "SAP_Notifications"
+        }
+      },
+      "notifications": {
+        "[development]": {
+          "kind": "notify-to-console"
+        },
+        "[hybrid]": {
+          "destination": "SAP_Notifications",
+          "kind": "notify-to-rest"
+        },
+        "[production]": {
+          "destination": "SAP_Notifications",
+          "kind": "notify-to-rest"
+        },
+        "prefix": "$app-name",
+        "types": "srv/notification-types.json",
+        "outbox": true
+      },
+      "kinds": {
+        "notify-to-console": {
+          "impl": "@cap-js/notifications/srv/notifyToConsole"
+        },
+        "notify-to-rest": {
+          "impl": "@cap-js/notifications/srv/notifyToRest"
+        }
+      },
       "[production]": {
         "db": {
           "kind": "hana"
@@ -63,7 +105,7 @@
                 "support"
               ]
             },
-             "doris.radu@msg.group": {
+            "doris.radu@msg.group": {
               "roles": [
                 "support"
               ]
@@ -71,7 +113,6 @@
           }
         }
       },
-      "destinations": true,
       "html5-repo": true,
       "workzone": true
     }
