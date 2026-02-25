@@ -6,6 +6,7 @@
     "@cap-js/hana": "^2",
     "@cap-js/notifications": "^0.3.0",
     "@sap/cds": "^9",
+    "@sap/cds-mtxs": "^3.7.1",
     "@sap/xsenv": "^6.1.0",
     "@sap/xssec": "^4",
     "axios": "^1.13.5",
@@ -47,12 +48,14 @@
       "level": "debug"
     },
     "requires": {
+      "multitenancy": true,
       "destinations": true,
       "[production]": {
         "db": {
           "kind": "hana"
         },
-        "auth": "xsuaa"
+        "auth": "xsuaa",
+        "multitenancy": true
       },
       "[development]": {
         "auth": {
@@ -71,14 +74,18 @@
             },
             "doris.radu@msg.group": {
               "roles": [
-                "support"
+                "support", "admin", "cds.Subscriber", "mtcallback", "internal-user"
               ]
             }
           }
         }
       },
       "html5-repo": true,
-      "workzone": true
-    }
+      "workzone": true,
+      "[with-mtx]": {
+        "multitenancy": true
+      }
+    },
+    "profile": "with-mtx-sidecar"
   }
 }

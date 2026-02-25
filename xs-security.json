@@ -1,8 +1,6 @@
 {
-  
   "xsappname": "my-Notes-36841dbdtrial-dev",
-  "tenant-mode": "dedicated",
-
+  "tenant-mode": "shared",
   "scopes": [
     {
       "name": "$XSAPPNAME.support",
@@ -11,6 +9,10 @@
     {
       "name": "$XSAPPNAME.admin",
       "description": "admin"
+    },
+    {
+      "name": "$XSAPPNAME.mtcallback",
+      "description": "Subscription via SaaS Registry"
     }
   ],
   "attributes": [],
@@ -48,5 +50,4 @@
       ]
     }
   ]
-
 }

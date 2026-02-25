@@ -8,6 +8,11 @@ class NotesService extends cds.ApplicationService {
 
         const { Notes, Tasks } = this.entities;
 
+        this.on('READ', 'Notes', (req: cds.Request) => {
+        console.log("Tenant ID:", req.tenant);        // CAP-parsed tenant
+        return cds.tx(req).run(SELECT.from('Notes'));
+    }); 
+
         this.on('deleteAllTasks', Notes, async (req: cds.Request) => {
             const NoteID = req.params[0].ID;
             await DELETE.from(Tasks).where({ note_ID: NoteID });

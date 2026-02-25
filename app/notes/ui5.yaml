@@ -42,4 +42,3 @@ builder:
         relativePaths: true
         additionalFiles:
           - xs-app.json
-

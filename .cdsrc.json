@@ -1,0 +1,16 @@
+{
+  "requires": {
+    "auth": {
+       "users": {
+          "alice": { "tenant": "t1", "roles": [ "cds.ExtensionDeveloper", "cds.Subscriber", "admin" ] },
+          "bob":   { "tenant": "t1", "roles": [ "cds.ExtensionDeveloper", "admin" ] },
+          "doris.radu@msg.group": { "tenant": "t2", "roles": [ "cds.ExtensionDeveloper", "cds.Subscriber", "admin" ] },
+          "*": false
+       },
+       "tenants": {
+         "t1": { "features": [] },
+         "t2": { "features": [] }
+       }
+    }
+ }
+}
