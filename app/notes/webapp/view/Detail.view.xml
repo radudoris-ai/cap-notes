@@ -1,0 +1,91 @@
+<mvc:View
+    controllerName="notes.controller.Detail"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+>
+    <Page
+        title="{i18n>detailPageTitle}"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+    >
+        <ObjectHeader
+            core:require="{
+                Date: 'sap/ui/model/type/Date'
+            }"
+            responsive="true"
+            fullScreenOptimized="true"
+            intro="{title}"
+            title="{description}"
+           
+        >
+        </ObjectHeader>
+
+        <Table
+            id="TasksTable"
+            class="sapUiResponsiveMargin"
+            width="auto"
+            items="{ path: 'tasks' }"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="{i18n>TasksTableTitle}" />
+                    <ToolbarSpacer />
+                    <Button
+                        text="Delete All Tasks"
+                        press=".onDeleteAllTasks"
+                    />
+                    <Button
+                        text="Add Task"
+                        press=".onAddTask"
+                        visible="{view>/editMode}"
+                    />
+                    <Button
+                        text="Edit"
+                        press=".onEdit"
+                        visible="{= !${view>/editMode} }"
+                    />
+                    <Button
+                        text="Save"
+                        type="Emphasized"
+                        press=".onSave"
+                        visible="{view>/editMode}"
+                    />
+                    <Button
+                        text="Cancel"
+                        press=".onCancel"
+                        visible="{view>/editMode}"
+                    />
+                    <SearchField
+                        width="50%"
+                        search=".onFilterTasks"
+                    />
+                </Toolbar>
+            </headerToolbar>
+            <columns>
+                <Column>
+                    <Text text="{i18n>columnDescription}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>columnDueDate}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>columnStatus}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input value="{description}" editable="{view>/editMode}" />
+                        <DatePicker value="{duedate}" editable="{view>/editMode}"/>
+                        <Select selectedKey="{status/code}" editable="{view>/editMode}">
+                            <core:Item key="N" text="New" />
+                            <core:Item key="I" text="In Process" />
+                            <core:Item key="D" text="Done" />
+                        </Select>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </Page>
+</mvc:View>

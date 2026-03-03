@@ -1,0 +1,45 @@
+<mvc:View controllerName="notes.controller.NotesList"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Page id="page" title="{i18n>title}">
+     <content>
+            <Table
+                id="NotesTable"
+                class="sapUiResponsiveMargin"
+                width="auto"
+                items="{ path: '/Notes' }"
+            >
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="{i18n>NotesListTitle}" />
+                        <ToolbarSpacer />
+                        <SearchField
+                            width="50%"
+                            search=".onFilterNotes"
+                        />
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="{i18n>columnTitle}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>columnDescription}" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem
+                        type="Navigation"
+                        press=".onPress"
+                    >
+                        <cells>
+                            <ObjectIdentifier title="{title}" />
+                            <Text text="{description}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

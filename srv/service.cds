@@ -18,3 +18,4 @@ service NotesService {
 
 annotate NotesService.Notes with @odata.draft.enabled;
 annotate NotesService.Notes with @(requires: 'support');
+annotate NotesService.Notes with @odata.draft.bypass;

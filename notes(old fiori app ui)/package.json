@@ -1,0 +1,27 @@
+{
+  "name": "notes",
+  "version": "0.0.1",
+  "description": "An SAP Fiori application.",
+  "keywords": [
+    "ui5",
+    "openui5",
+    "sapui5"
+  ],
+  "main": "webapp/index.html",
+  "devDependencies": {
+    "@sap/ux-ui5-tooling": "^1.13.3",
+    "@ui5/cli": "^1.14.0",
+    "ui5-task-zipper": "^3"
+  },
+  "scripts": {
+    "deploy-config": "npx -p @sap/ux-ui5-tooling fiori add deploy-config cf",
+    "start": "ui5 serve",
+    "build": "ui5 build --clean-dest",
+    "build:cf": "npm run build:ui5",
+    "build:ui5": "ui5 build preload --clean-dest --config ui5-deploy.yaml --include-task=generateCachebusterInfo",
+    "inst": "npm install"
+  },
+  "dependencies": {
+    "mbt": "^1.2.24"
+  }
+}

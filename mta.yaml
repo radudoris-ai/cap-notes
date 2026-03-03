@@ -53,9 +53,9 @@ modules:
   build-parameters:
     build-result: resources
     requires:
-      - name: notes
+      - name: ui5notes
         artifacts:
-          - notes.zip
+          - ui5notes.zip
         target-path: resources/
 
 # -------------------- DESTINATIONs --------------------------    
@@ -101,9 +101,9 @@ modules:
     no-source: true
 
 # -------------------- HTML5 extensibility --------------------------       
-- name: notes
+- name: ui5notes
   type: html5
-  path: app/notes
+  path: app/ui5notes
   build-parameters:
     build-result: dist
     builder: custom

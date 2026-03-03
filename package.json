@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A simple CAP project.",
   "dependencies": {
+    "@cap-js-community/odata-v2-adapter": "^1.15.9",
     "@cap-js/hana": "^2",
     "@cap-js/notifications": "^0.3.0",
     "@sap/cds": "^9",
@@ -17,16 +18,16 @@
     "@cap-js/sqlite": "^2",
     "@sap/cds-dk": "^9.6.1",
     "@types/node": "^24.0.0",
-    "@ui5/cli": "^4.0.42",
+    "@ui5/cli": "^4.0.45",
     "cds-plugin-ui5": "^0.13.0",
     "mbt": "^1.2.24",
     "rimraf": "^5.0.5",
     "tsx": "^4",
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   },
   "scripts": {
     "start": "cds-serve",
-    "watch-notes": "cds watch --open ns.notes/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-notes": "cds watch --open notes/index.html?sap-ui-xx-viewCache=false --livereload false",
     "undeploy": "cf undeploy my-Notes --delete-services --delete-service-keys --delete-service-brokers",
     "build": "npx -p mbt mbt build",
     "build:cf": "cds build --production",

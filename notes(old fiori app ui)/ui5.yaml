@@ -2,7 +2,7 @@
 
 specVersion: "4.0"
 metadata:
-  name: notes
+  name: mynotes
 type: application
 server:
   customMiddleware:
@@ -26,19 +26,20 @@ server:
       configuration:
         flp:
           theme: sap_horizon
-    - name: ui5-tooling-transpile-middleware
-      afterMiddleware: compression
-      configuration:
-        debug: true
-        transformModulesToUI5:
-          overridesToOverride: true
-        excludePatterns:
-          - /Component-preload.js
+resources:
+  configuration:
+    propertiesFileSourceEncoding: UTF-8
 builder:
+  resources:
+    excludes:
+      - "/test/**"
+      - "/localService/**"
   customTasks:
-    - name: ui5-tooling-transpile-task
-      afterTask: replaceVersion
+    - name: ui5-task-zipper
+      afterTask: generateVersionInfo
       configuration:
-        debug: true
-        transformModulesToUI5:
-          overridesToOverride: true
+        archiveName: notes
+        relativePaths: true
+        additionalFiles:
+          - xs-app.json
+
