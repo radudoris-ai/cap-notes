@@ -1,20 +1,14 @@
-import Controller from "sap/ui/core/mvc/Controller";
 import UIComponent from "sap/ui/core/UIComponent";
 import { Route$PatternMatchedEvent } from "sap/ui/core/routing/Route";
-import History from "sap/ui/core/routing/History";
-import { SearchField$SearchEvent } from "sap/ui/commons/SearchField";
-import FilterOperator from "sap/ui/model/FilterOperator";
-import Filter from "sap/ui/model/odata/Filter";
-import ListBinding from "sap/ui/model/ListBinding";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import ODataModel from "sap/ui/model/odata/v4/ODataModel";
-import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
-import ODataContextBinding from "sap/ui/model/odata/v4/ODataContextBinding";
-import ODataContext from "sap/ui/model/odata/v4/Context";
+import ODataModel from "sap/ui/model/odata/v2/ODataModel";
+import BaseController from "./BaseController";
+
 /**
  * @namespace ui5.notes.controller
  */
-export default class Detail extends Controller {
+export default class Detail extends BaseController {
+    //export default BaseController.extend("notes.controller.Detail", {
 
     onInit(): void {
 
@@ -29,110 +23,85 @@ export default class Detail extends Controller {
     }
 
     onObjectMatched(event: Route$PatternMatchedEvent): void {
-
         const sId = event.getParameter("arguments" as any).noteId;
         this.getView()?.bindElement({
-            path: "/Notes(ID='" + sId + "',IsActiveEntity=true)",
+            path: "/Notes(ID='" + sId + "')",
             parameters: {
-                $expand: "tasks($expand=status)"   // <-- THIS is required in OData V4
+                $expand: "tasks($expand=status)"
             }
         });
     }
 
-
-    onNavBack(): void {
-        const history = History.getInstance();
-        const previousHash = history.getPreviousHash();
-
-        if (previousHash !== undefined) {
-            window.history.go(-1);
-        } else {
-            const router = UIComponent.getRouterFor(this);
-            router.navTo("NotesList", {}, true);
-        }
-    }
-
-    onFilterTasks(event: SearchField$SearchEvent): void {
-        // build filter array
-        const filter = [];
+    onFilterTasks(event: any): void {
         const query = event.getParameter("query");
-        if (query) {
-            filter.push(new Filter("description", FilterOperator.Contains, query));
-        }
-        // filter binding
-        const list = this.byId("TasksTable");
-        const binding = list?.getBinding("items") as ListBinding;
-        binding?.filter(filter);
+        this.filterTableByQuery("TasksTable", "description", query);
     }
 
-    public onEdit(): void {
+    onEdit(): void {
         const oViewModel = this.getView()!.getModel("view") as JSONModel;
         oViewModel?.setProperty("/editMode", true);
 
-    }
-    public onCancel(): void {
-        const oModel = this.getView()!.getModel() as ODataModel; // OData v4 model
-        oModel?.resetChanges("$auto");
-
-        const oViewModel = this.getView()!.getModel("view") as JSONModel;
-        oViewModel?.setProperty("/editMode", false);
+        console.log("<<<<<<<<<<<<end edit<<<<<<<<<<<<<<<<", "oViewModel:", oViewModel);
+        const oTable = this.byId("TasksTable");
+        console.log(oTable?.getBinding("items"));
     }
 
-    /**
-     * Save draft changes
-     */
-    public async onSave(): Promise<void> {
-        const oView = this.getView()!;
-        const oODataModel = oView.getModel() as ODataModel;
+    onCancel() {
+        const oTable = this.byId("TasksTable")!;
+        //  const oModel = this.getView()!.getModel() as ODataModel;
 
-        try {
-            await oODataModel.submitBatch("$auto");
+        //  oModel.resetChanges(); // this undoes all unsaved edits
+        this.resetChanges();
+        oTable.getBinding("items")!.refresh(true);
+        this.setEditMode(false);
+    }
 
-            const oViewModel = oView.getModel("view") as JSONModel;
-            oViewModel.setProperty("/editMode", false);
-        } catch (err) {
-            console.error("Error saving draft:", err);
-        }
+    async onSave(): Promise<void> {
+        const oModel = this.getView()?.getModel() as ODataModel;
 
+        console.log("Pending changes:", oModel.getPendingChanges());
+        /* const oInput = this.byId("myInput") as sap.m.Input;
+         const oBinding = oInput?.getBinding("value");
+         console.log(oBinding); */
 
+        oModel.submitChanges({
+            success: () => {
+                console.log("Changes saved successfully", "oModel:", oModel);
+
+                //  this.getView()?.getElementBinding()?.refresh(true);
+                // oModel.refresh(true);
+                // this.byId("TasksTable")?.getBinding("items")?.refresh(true);
+
+            },
+            error: (oError: any) => {
+                console.error("Save failed:", oError);
+            }
+        });
+        this.setEditMode(false);
     }
 
     /**
      * Add a new Task row in the Tasks table
      */
-    public async onAddTask(): Promise<void> {
-        const oTable = this.byId("TasksTable");
-        if (!oTable) return;
+    onAddTask(): void {
+        const oModel = this.getView()?.getModel() as ODataModel;
+        const oContext = this.getView()!.getBindingContext()!;
 
-        const oBinding = oTable.getBinding("items");
-        if (oBinding && "create" in oBinding) {
-            (oBinding as ODataListBinding).create({
-                description: "",
-                duedate: null
-            });
-        }
-
+        oModel.create(`${oContext.getPath()}/tasks`, {
+            description: "",
+            duedate: null,
+            status: { code: "N" }
+        }, {
+            success: () => console.log("Task created"),
+            error: (err: unknown) => console.error("Create failed", err)
+        });
+    }
+    public onDeleteAllTasks = async (): Promise<void> => {
+        await this.callBoundAction("/Notes_deleteAllTasks", "TasksTable");
     }
 
-    public async onDeleteAllTasks(): Promise<void> {
-        const oView = this.getView()!;
-        const oModel = oView.getModel() as ODataModel;
-        const oContext = oView.getBindingContext() as ODataContext;
-        if (!oContext) return;
-
-        try {
-            // Create action binding relative to the Note context
-            const oActionBinding = oModel.bindContext(
-                "NotesService.deleteAllTasks(...)",
-                oContext
-            ) as any;
-
-            await oActionBinding.execute();
-            await oContext.refresh();
-
-        } catch (error) {
-            console.error("Delete all tasks failed:", error);
-        }
+    public onCheckDueTasks = async (): Promise<void> => {
+        await this.callBoundAction("/Notes_checkDueTasks", "TasksTable");
     }
 
-};
+}

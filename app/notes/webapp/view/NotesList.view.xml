@@ -1,45 +1,85 @@
-<mvc:View controllerName="notes.controller.NotesList"
+<mvc:View
+    controllerName="notes.controller.NotesList"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:core="sap.ui.core">
-    <Page id="page" title="{i18n>title}">
-     <content>
-            <Table
-                id="NotesTable"
-                class="sapUiResponsiveMargin"
-                width="auto"
-                items="{ path: '/Notes' }"
-            >
-                <headerToolbar>
-                    <Toolbar>
-                        <Title text="{i18n>NotesListTitle}" />
-                        <ToolbarSpacer />
-                        <SearchField
-                            width="50%"
-                            search=".onFilterNotes"
+    xmlns:core="sap.ui.core"
+    xmlns:uxap="sap.uxap"
+    xmlns:layout="sap.ui.layout"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+        showHeader="true"
+        showSubHeader="true"
+    >
+        <Table
+            id="NotesTable"
+            class="sapUiResponsiveMargin"
+            width="auto"
+            items="{ path: '/Notes' }"
+            mode="MultiSelect"
+            includeItemInSelection="true"
+            selectionChange=".onSelectionChange"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="{i18n>NotesListTitle}" />
+                    <ToolbarSpacer />
+                    <SearchField
+                        width="50%"
+                        search=".onFilterNotes"
+                    />
+                    <Button
+                        text="Create"
+                        press=".onAddNote"
+                        enabled="true"
+                    />
+                    <Button
+                        text="Delete"
+                        press=".onDeleteNote"
+                        enabled="{view>/hasSelection}" 
+                    />
+                    <Button
+                        text="Save"
+                        press=".onSave"
+                        enabled="{view>/editMode}"
+                    />
+                    <Button
+                        text="Cancel"
+                        press=".onCancel"
+                        enabled="{view>/editMode}"
+                    />
+                </Toolbar>
+            </headerToolbar>
+            <columns>
+                <Column>
+                    <Text text="{i18n>columnTitle}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>columnDescription}" />
+                </Column>
+                <Column width="5%">
+                    <Text text="" />  <!-- placeholder header for button -->
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem type="Active">
+                    <cells>
+                        <Input
+                            value="{title}"
+                            editable="{view>/editMode}"
                         />
-                    </Toolbar>
-                </headerToolbar>
-                <columns>
-                    <Column>
-                        <Text text="{i18n>columnTitle}" />
-                    </Column>
-                    <Column>
-                        <Text text="{i18n>columnDescription}" />
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem
-                        type="Navigation"
-                        press=".onPress"
-                    >
-                        <cells>
-                            <ObjectIdentifier title="{title}" />
-                            <Text text="{description}" />
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-        </content>
+                        <Input
+                            value="{description}"
+                            editable="{view>/editMode}"
+                        />
+                        <Button
+                            icon="sap-icon://inspect"
+                            press=".onPress"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
     </Page>
 </mvc:View>

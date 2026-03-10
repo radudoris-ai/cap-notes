@@ -44,6 +44,11 @@
     "#cds-models/*": "./@cds-models/*/index.js"
   },
   "cds": {
+    "env": {
+      "fiori": {
+        "bypass_draft": true
+      }
+    },
     "log": {
       "level": "debug"
     },

@@ -1,0 +1,133 @@
+<mvc:View
+    controllerName="notes.controller.Detail"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:uxap="sap.uxap"
+>
+    <Page
+        title="{i18n>detailPageTitle}"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+    >
+        <VBox
+            class="sapUiResponsiveMargin"
+            width="auto"
+        >
+            <!-- DISPLAY MODE -->
+            <ObjectHeader
+                class="sapUiResponsiveMargin"
+                visible="{= !${view>/editMode} }"
+                intro="{title}"
+                title="{description}"
+            />
+            <!-- EDIT MODE -->
+            <VBox
+                class="sapUiResponsiveMargin"
+                width="auto"
+                visible="{view>/editMode}"
+            >
+                <Label text="Title" />
+                <Input value="{title}" />
+                <Label
+                    text="Description"
+                    class="sapUiSmallMargin"
+                />
+                <TextArea
+                    value="{description}"
+                    rows="3"
+                />
+            </VBox>
+        </VBox>
+        <Table
+            id="TasksTableObsolete"
+            class="sapUiResponsiveMargin"
+            width="auto"
+            items="{ path: 'tasks' }"
+        >
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="{i18n>TasksTableTitle}" />
+                    <ToolbarSpacer />
+                    <Button
+                        text="Delete All Tasks"
+                        press=".onDeleteAllTasks"
+                        class="sapUiSmallMarginEnd"
+                    />
+                    <Button
+                        text="Add Task"
+                        press=".onAddTask"
+                        visible="{view>/editMode}"
+                        class="sapUiSmallMarginEnd"
+                    />
+                    <Button
+                        text="Edit"
+                        press=".onEdit"
+                        visible="{= !${view>/editMode} }"
+                        class="sapUiSmallMarginEnd"
+                    />
+                    <Button
+                        text="Save"
+                        type="Emphasized"
+                        press=".onSave"
+                        visible="{view>/editMode}"
+                        class="sapUiSmallMarginEnd"
+                    />
+                    <Button
+                        text="Cancel"
+                        press=".onCancel"
+                        visible="{view>/editMode}"
+                        class="sapUiSmallMarginEnd"
+                    />
+                    <SearchField
+                        width="50%"
+                        search=".onFilterTasks"
+                        class="sapUiSmallMarginEnd"
+                    />
+                </Toolbar>
+            </headerToolbar>
+            <columns>
+                <Column>
+                    <Text text="{i18n>columnDescription}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>columnDueDate}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>columnStatus}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Input
+                            value="{description}"
+                            editable="{view>/editMode}"
+                        />
+                        <DatePicker
+                            value="{duedate}"
+                            editable="{view>/editMode}"
+                        />
+                        <Select
+                            selectedKey="{status/code}"
+                            editable="{view>/editMode}"
+                        >
+                            <core:Item
+                                key="N"
+                                text="New"
+                            />
+                            <core:Item
+                                key="I"
+                                text="In Process"
+                            />
+                            <core:Item
+                                key="D"
+                                text="Done"
+                            />
+                        </Select>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </Page>
+</mvc:View>

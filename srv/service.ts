@@ -15,7 +15,7 @@ class NotesService extends cds.ApplicationService {
 
         this.on('checkDueTasks', Notes, async (req: cds.Request) => {
             try {
-                await sendAlert();       
+                await sendAlert();
                 return "Alert sent successfully!";
             } catch (err) {
                 if (err instanceof Error) {
@@ -24,8 +24,29 @@ class NotesService extends cds.ApplicationService {
                     req.error(500, String(err)); // fallback
                 }
             }
-        });  
-           
+        });
+
+        this.on('UPDATE', Tasks, async (req: cds.Request) => {
+            const NoteID = req.params[0].ID;
+            console.log("<<<<<<Tasks <<<<<<update Note, ID:",NoteID);  
+            await UPDATE(Tasks)
+                .where({ note_ID: NoteID });
+            await UPDATE(Notes)
+                .where({ ID: NoteID });
+        });
+
+         this.on('UPDATE', Notes, async (req: cds.Request) => {
+            const NoteID = req.params[0].ID;
+
+            console.log("<<<<<<Notes <<<<<<update Note, ID:",NoteID);  
+
+            await UPDATE(Tasks)
+                .where({ note_ID: NoteID });
+            await UPDATE(Notes)
+                .where({ ID: NoteID });
+             
+        });
+
 
         /*  this.after("READ", "Tasks", async (tasks: any[], req) => {
         
