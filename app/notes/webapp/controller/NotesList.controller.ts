@@ -7,6 +7,9 @@ import MessageToast from "sap/m/MessageToast";
 import Table from "sap/m/Table";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import BaseController from "./BaseController";
+import ODataListBinding from "sap/ui/model/odata/v2/ODataListBinding";
+import Context from "sap/ui/model/odata/v2/Context";
+import ColumnListItem from "sap/m/ColumnListItem";
 
 /**
  * @namespace notes.controller
@@ -14,15 +17,27 @@ import BaseController from "./BaseController";
 export default class NotesList extends BaseController {
 
     onInit(): void {
+
         // Create a view model for controlling edit mode
         const oViewModel = new JSONModel({
-            editMode: true,
+            editMode: false,
             hasSelection: false
         });
         this.getView()?.setModel(oViewModel, "view");
+        const oModel = this.getView()?.getModel() as ODataModel;
+        if (!oModel) {
+            console.error("ODataModel not found");
+            return;
+        }
+        oModel.setDefaultBindingMode("TwoWay");
     }
+
+    onEdit(): void {
+        this.setEditMode(true);
+    }
+
     onSelectionChange(): void {
-        const oTable = this.byId("NotesTable")  as Table;
+        const oTable = this.byId("NotesTable") as Table;
         const hasSelection = oTable.getSelectedItems().length > 0;
 
         const oViewModel = this.getView()?.getModel("view") as JSONModel;
@@ -52,7 +67,13 @@ export default class NotesList extends BaseController {
     onAddNote(): void {
         const oModel = this.getView()?.getModel() as ODataModel;
         if (!oModel) return;
-        const oContext = this.getView()!.getBindingContext()!;
+        /*  const oTable = this.byId("NotesTable") as Table;
+          const oBinding = oTable.getBinding("items") as ODataListBinding;
+  
+          const oContext = oBinding.create({
+              title: "",
+              description: ""
+          }); */
 
         oModel.create("/Notes", {
             description: "",
@@ -61,6 +82,7 @@ export default class NotesList extends BaseController {
             success: () => console.log("Task created"),
             error: (err: unknown) => console.error("Create failed", err)
         });
+
 
         // Set edit mode on if not already
         this.setEditMode(true);
@@ -97,24 +119,30 @@ export default class NotesList extends BaseController {
         oTable.removeSelections(true);
 
         const oViewModel = this.getView()?.getModel("view") as JSONModel;
-        oViewModel.setProperty("/hasSelection", false);   
+        oViewModel.setProperty("/hasSelection", false);
     }
     onSave(): void {
         const oModel = this.getView()?.getModel() as ODataModel;
+        const oTable = this.byId("NotesTable") as Table;
+        const aItems = oTable.getItems();
+
+        /*if (!oModel) {
+            console.error("ODataModel not found");
+            return;
+        }
+        oModel.setDefaultBindingMode("TwoWay"); */
+
+        console.log("Pending changes:", oModel.getPendingChanges());
+        // oModel.setUseBatch(true);
         oModel.submitChanges({
             success: () => {
                 MessageToast.show("Changes saved");
-
-                // Remove _isNew flag from all rows
-                const aNotes = oModel.getProperty("/Notes");
-                aNotes.forEach((note: any) => delete note._isNew);
-                oModel.refresh(); // refresh the table binding
             },
             error: () => {
                 MessageToast.show("Error saving changes");
             }
         });
-        //  this.setEditMode(false);
+        this.setEditMode(false);
     }
 
     public onCancel(): void {
@@ -122,7 +150,7 @@ export default class NotesList extends BaseController {
         this.resetChanges();
 
         oTable.getBinding("items")!.refresh(true);
-        //  this.setEditMode(false);
+        this.setEditMode(false);
     }
 
 }

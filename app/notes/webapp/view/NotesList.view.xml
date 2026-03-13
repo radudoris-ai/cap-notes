@@ -30,9 +30,15 @@
                         search=".onFilterNotes"
                     />
                     <Button
+                        text="Edit"
+                        type="Emphasized"
+                        press=".onEdit"
+                        enabled="{= !${view>/editMode} }"
+                    />
+                    <Button
                         text="Create"
                         press=".onAddNote"
-                        enabled="true"
+                        enabled="{view>/editMode}"
                     />
                     <Button
                         text="Delete"

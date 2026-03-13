@@ -6,7 +6,7 @@
     xmlns:uxap="sap.uxap"
     xmlns:layout="sap.ui.layout"
 >
-    <uxap:ObjectPageLayout id="ObjectPage" >
+    <uxap:ObjectPageLayout id="ObjectPage">
         <!-- HEADER -->
         <uxap:headerTitle>
             <uxap:ObjectPageDynamicHeaderTitle>
@@ -48,7 +48,7 @@
                         press=".onDeleteAllTasks"
                     />
 
-                     <Button
+                    <Button
                         text="Send Notification"
                         press=".onCheckDueTasks"
                     />
@@ -62,9 +62,7 @@
             <uxap:ObjectPageSection title="{i18n>GeneralInfo}">
                 <uxap:subSections>
                     <uxap:ObjectPageSubSection>
-                        <layout:Grid
-                            class="sapUiMediumMargin"
-                        >
+                        <layout:Grid class="sapUiMediumMargin">
                             <!-- TITLE -->
                             <VBox>
                                 <Label text="Title" />
@@ -93,6 +91,7 @@
                                     value="{description}"
                                     rows="1"
                                     visible="{view>/editMode}"
+                                    valueLiveUpdate="true"
                                 />
                             </VBox>
                         </layout:Grid>
@@ -106,7 +105,7 @@
                     <uxap:ObjectPageSubSection>
                         <Table
                             id="TasksTable"
-                            items="{tasks}"
+                            items="{ path: 'tasks', parameters: { expand: 'status' } }"
                             class="sapUiResponsiveMargin"
                             width="auto"
                         >
@@ -133,56 +132,68 @@
                                 <Column width="25%">
                                     <Text text="{i18n>columnDescription}" />
                                 </Column>
-
-                                <Column width="20%">
+                                <Column width="25%">
                                     <Text text="{i18n>columnStatus}" />
                                 </Column>
-
-                                <Column width="20%">
+                                <Column width="25%" />
+                                <Column width="25%">
                                     <Text text="{i18n>columnDueDate}" />
                                 </Column>
 
-                                <Column width="20%">
+                                <Column width="25%">
                                     <Text text="{i18n>columnAssignedTo}" />
                                 </Column>
                             </columns>
 
                             <!-- TABLE DATA -->
-                                <ColumnListItem>
-                                    <cells>
-                                        <Input
-                                            value="{description}"
-                                            editable="{view>/editMode}"
+                            <ColumnListItem
+                                highlight="{= ${status/code} === 'N' ? 'Indication05' :
+                                             ${status/code} === 'I' ? 'Indication03' :
+                                             'Indication04'}"
+                            >
+                                <cells>
+                                    <Input
+                                        value="{description}"
+                                        editable="{view>/editMode}"
+                                    />
+                                    <Select
+                                        selectedKey="{status_code}"
+                                        items="{ path: '/Status' }"
+                                        editable="{view>/editMode}"
+                                        showSecondaryValues="true"
+                                        change=".onStatusChange"
+                                    >
+                                        <core:ListItem
+                                            key="{code}"
+                                            text="{descr}"
                                         />
+                                    </Select>
+                                    <ObjectStatus
+                                        id="statusObject"
+                                        icon="{= ${status/code} === 'N' ? 'sap-icon://information' :
+                                             ${status/code} === 'I' ? 'sap-icon://alert' :
+                                             'sap-icon://sys-enter-2'}"
+                                        state="{= ${status/code} === 'N' ? 'Information' :
+                                             ${status/code} === 'I' ? 'Warning' :
+                                             'Success'}"
+                                    />
 
-                                        <Select
-                                            selectedKey="{status/code}"
-                                            editable="{view>/editMode}"
-                                        >
-                                            <core:Item
-                                                key="N"
-                                                text="New"
-                                            />
-                                            <core:Item
-                                                key="I"
-                                                text="In Process"
-                                            />
-                                            <core:Item
-                                                key="D"
-                                                text="Done"
-                                            />
-                                        </Select>
-
-                                        <DatePicker
-                                            value="{duedate}"
-                                            editable="{view>/editMode}"
-                                        />
-                                         <Input
-                                            value="{assignedto}"
-                                            editable="{view>/editMode}"
-                                        />
-                                    </cells>
-                                </ColumnListItem>
+                                    <DatePicker
+                                        value="{
+                                            path: 'duedate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                pattern: 'yyyy-MM-dd'
+                                            }
+                                        }"
+                                        editable="{view>/editMode}"
+                                    />
+                                    <Input
+                                        value="{assignedto}"
+                                        editable="{view>/editMode}"
+                                    />
+                                </cells>
+                            </ColumnListItem>
                         </Table>
                     </uxap:ObjectPageSubSection>
                 </uxap:subSections>

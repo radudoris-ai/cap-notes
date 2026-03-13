@@ -59,7 +59,7 @@ export default class BaseController extends Controller {
     /** Reset all pending changes on OData model */
     resetChanges() {
         const oModel = this.getODataModel();
-        oModel.resetChanges();
+        oModel.resetChanges(undefined, true, true);
     }
 
     /** Submit OData changes with success/error logging */

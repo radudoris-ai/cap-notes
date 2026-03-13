@@ -98,7 +98,7 @@
                 </Column>
             </columns>
             <items>
-                <ColumnListItem>
+                <ColumnListItem class ="{= {status/code} === N ? statusN : {status/code} === I ? statusI : statusD}" >
                     <cells>
                         <Input
                             value="{description}"

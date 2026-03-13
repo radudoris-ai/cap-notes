@@ -3,12 +3,15 @@ import { Route$PatternMatchedEvent } from "sap/ui/core/routing/Route";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import ODataModel from "sap/ui/model/odata/v2/ODataModel";
 import BaseController from "./BaseController";
+import formatter from "../model/formatter";
 
 /**
  * @namespace ui5.notes.controller
  */
 export default class Detail extends BaseController {
     //export default BaseController.extend("notes.controller.Detail", {
+
+    public formatter = formatter;
 
     onInit(): void {
 
@@ -38,12 +41,7 @@ export default class Detail extends BaseController {
     }
 
     onEdit(): void {
-        const oViewModel = this.getView()!.getModel("view") as JSONModel;
-        oViewModel?.setProperty("/editMode", true);
-
-        console.log("<<<<<<<<<<<<end edit<<<<<<<<<<<<<<<<", "oViewModel:", oViewModel);
-        const oTable = this.byId("TasksTable");
-        console.log(oTable?.getBinding("items"));
+        this.setEditMode(true);
     }
 
     onCancel() {
@@ -70,7 +68,6 @@ export default class Detail extends BaseController {
 
                 //  this.getView()?.getElementBinding()?.refresh(true);
                 // oModel.refresh(true);
-                // this.byId("TasksTable")?.getBinding("items")?.refresh(true);
 
             },
             error: (oError: any) => {
@@ -102,6 +99,82 @@ export default class Detail extends BaseController {
 
     public onCheckDueTasks = async (): Promise<void> => {
         await this.callBoundAction("/Notes_checkDueTasks", "TasksTable");
+    }
+
+  /*  formatHighlight(status: string): string {
+        switch (status) {
+            case "D":
+                return "Indication04"; // green
+            case "I":
+                return "Indication03"; // orange
+            case "N":
+                return "Indication05"; // blue
+            default:
+                return "None";
+        }
+    }
+
+    formatStatusIcon(status: string): string {
+        switch (status) {
+            case "D":
+                return "sap-icon://sys-enter-2";
+            case "I":
+                return "sap-icon://alert";
+            case "N":
+                return "sap-icon://information";
+            default:
+                return "";
+        }
+    }
+
+    formatStatusState(status: string): string {
+        switch (status) {
+            case "D":
+                return "Success";
+            case "I":
+                return "Warning";
+            case "N":
+                return "Information";
+            default:
+                return "None";
+        }
+    } */
+
+ onStatusChange(oEvent: any) {
+        
+        const oSelect = oEvent.getSource();
+        const sStatus = oSelect.getSelectedKey();
+
+       const oItem = oSelect.getParent() as any; // ColumnListItem
+        const oStatus = oItem.getCells().find((c: any) => c.getId().includes("statusObject"));
+
+        let sHighlight = "None";
+        let sIcon = "";
+        let sState = "None";
+
+        console.log("<<<<<<<<<<<<<status", sStatus);
+
+        switch (sStatus) {
+            case "D":
+                sHighlight = "Indication04"; // green
+                sIcon = "sap-icon://sys-enter-2";
+                sState = "Success";
+                break;
+            case "I":
+                sHighlight = "Indication03"; // orange
+                sIcon = "sap-icon://alert";
+                sState = "Warning";
+                break;
+            case "N":
+                sHighlight = "Indication05"; // blue
+                sIcon = "sap-icon://information";
+                sState = "Information";
+                break;
+        }
+
+        oItem.setHighlight(sHighlight);
+        oStatus.setIcon(sIcon);
+        oStatus.setState(sState); 
     }
 
 }
