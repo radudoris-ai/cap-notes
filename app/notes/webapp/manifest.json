@@ -25,6 +25,24 @@
           "defaultBindingMode": "TwoWay"
         }
       }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "notes-manage": {
+          "semanticObject": "notes",
+          "action": "manage",
+          "title": "{{flpTitle}}",
+          "subTitle": "{{flpSubtitle}}"
+        },
+        "notes-display": {
+          "semanticObject": "notes",
+          "action": "display",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {
