@@ -106,7 +106,9 @@
         {
           "name": "NotesDetail",
           "pattern": "Notes/{noteId}",
-          "target": ["TargetNotesDetail"]
+          "target": [
+            "TargetNotesDetail"
+          ]
         }
       ],
       "targets": {
@@ -126,5 +128,9 @@
       "id": "App",
       "async": true
     }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "mynotes"
   }
 }

@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";const s={statusClass(s){console.log("STATUS:",s);switch(s){case"N":return"statusN";case"I":return"statusI";case"D":return"statusD";default:return""}}};return s});
+//# sourceMappingURL=formatter.js.map

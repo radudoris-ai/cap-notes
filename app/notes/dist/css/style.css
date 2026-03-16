@@ -1,0 +1,18 @@
+/* Enter your custom styles here */
+.sapUxAPObjectPageSectionTitle {
+    text-transform: none !important;
+}
+.statusN .sapMSlt,
+.statusN .sapMSltLabel {
+    background-color: #d0e7ff !important; /* blue */
+}
+
+.statusI .sapMSlt,
+.statusI .sapMSltLabel {
+    background-color: #fff3b0 !important; /* yellow */
+}
+
+.statusD .sapMSlt,
+.statusD .sapMSltLabel {
+    background-color: #d4f5d0 !important; /* green */
+}

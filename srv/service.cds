@@ -6,7 +6,7 @@ using {do.capire.Notes as my} from '../db/schema';
 service NotesService {
    entity Notes as projection on my.Notes actions{
 
-      @(requires: 'admin')
+   //   @(requires: 'admin')
       @(Common.SideEffects: {TargetEntities: ['in']})
       action deleteAllTasks();
 

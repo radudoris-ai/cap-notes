@@ -28,9 +28,9 @@
   "scripts": {
     "start": "cds-serve",
     "watch-notes": "cds watch --open notes/index.html?sap-ui-xx-viewCache=false --livereload false",
-    "undeploy": "cf undeploy my-Notes --delete-services --delete-service-keys --delete-service-brokers",
     "build": "npx -p mbt mbt build",
     "build:cf": "cds build --production",
+     "inst": "npm install",
     "deploy": "cf deploy mta_archives/mynotes_1.0.0.mtar"
   },
   "private": true,
